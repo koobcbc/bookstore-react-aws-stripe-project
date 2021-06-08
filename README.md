@@ -1,68 +1,79 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Setting Up / Installation
+- You need node.js, npm, git
+- https://docs.amplify.aws/start/getting-started/installation/q/integration/react
+- Sign up for AWS account
+- 
+## Initialize Amplified Project
 
-## Available Scripts
 
-In the project directory, you can run:
+### `install amplified cli`
+```
+npm i -g @aws-amplify/cli@4.24
+```
+or do
+```
+sudo npm install -g @aws-amplify/cli --unsafe-perm=true
+```
 
-### `yarn start`
+### Error I encountered
+I got a messege saying `amplify configure -bash: amplify: command not found`
+I fixed the issue by changing environment installation path and node.js path.
+```
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/BeechuiKoo/.npm-global/bin"
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `configure aws/cli`
+```
+amplify configure
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+#### `set up the new user`
+I used amplify-user for the new IAM user name / default for the profile name
 
-### `yarn test`
+Initialize and connect project in the cloud
+```
+amplify init
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `Adding Authentication with Cognito`
+```
+amplify add auth
+```
 
-### `yarn build`
+## Create S3 Bucket to store images
+```
+amplify add storage
+```
+- I used "bookImages" for the name of my resource
+- Use default bucket name (because it has to be unique)
+- Who should have access: Choose "Auth and guest users"
+    - Because you want the guest to view and read the books as well.
+- For Authenticated Users: You want them to do all of "create/update", "read", "delete"
+- For Guest Users: Only the "read"
+- "No" Lambda Trigger
+S3 Bucket is created successfully.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Lambda functions to process book orders.
+- AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources for you. You can use AWS Lambda to extend other AWS services with custom logic, or create your own back-end services that operate at AWS scale, performance, and security.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
+amplify add function
+```
+- I used "processPayment" for the name/label
+```
+? Select which capability you want to add: Lambda function (serverless function)
+? Provide an AWS Lambda function name: processPayment
+? Choose the runtime that you want to use: NodeJS
+? Choose the function template that you want to use: Hello World
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+? Do you want to configure advanced settings? Yes
+? Do you want to access other resources in this project from your Lambda function? No
+? Do you want to invoke this function on a recurring schedule? No
+? Do you want to configure Lambda layers for this function? No
+? Do you want to edit the local lambda function now? No
+```
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+I want to add another lambda function
+```
+amplify add function
+```
